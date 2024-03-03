@@ -1,0 +1,42 @@
+name: Reprepro Action
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up reprepro
+      run: |
+        sudo apt-get update
+        sudo apt-get install reprepro yq
+        for dir in */
+        do
+          cd "${dir%/}/"
+          archs=$(yq -r .archs[] opspt.vars.yml)
+          codenames=$(yq -r .codenames[] opspt.vars.yml)
+          version=$(cat opspt.version)
+          rm -rf dist
+          make -f opspt.mk build_if_updated
+          if [ -d "dist" ]; then
+            cd dist
+            mkdir conf
+            for arch in $archs; do
+              for codename in $codenames; do
+                rm conf/distributions 
+                cp ../opspt.distributions conf/distributions
+                sed -i -e "s/%arch%/${arch}/g" -e "s/%codename%/${codename}/g" conf/distributions
+                cat conf/distributions
+                reprepro export
+                # Build debian packages
+                reprepro includedeb bullseye "./${dir%/}_${codename}_${arch}_${version}.deb"
+              done
+            done
+            cd ..
+          fi
+          cd ..
+        done
