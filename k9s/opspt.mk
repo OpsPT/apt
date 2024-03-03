@@ -1,6 +1,6 @@
 LATEST_RELEASE := $(shell curl -s https://api.github.com/repos/derailed/k9s/releases/latest | grep "tag_name" | cut -d '"' -f 4) 
 AVAILABLE_VERSION := $(shell tail -n 1 opspt.version) 
-COMMIT := $(shell git log -1 --pretty=format:%H -- opts.version)
+COMMIT := $(shell git log -1 --pretty=format:%H -- opspt.version)
 
 check_version:
 	@if [ "$(LATEST_RELEASE)" != "$(AVAILABLE_VERSION)" ]; then \
@@ -9,7 +9,7 @@ check_version:
 	fi
 
 build_if_updated:
-	@if [ "$(COMMIT)" != "$(shell git rev-parse HEAD)" ]; then \
+	@if [ "$(COMMIT)" = "$(shell git rev-parse HEAD)" ]; then \
 		make -f opspt.mk build; \
 	fi
 
