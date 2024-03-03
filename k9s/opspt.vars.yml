@@ -1,0 +1,7 @@
+codenames:
+  - bookworm
+  - bullseye
+  - buster
+archs:
+  - amd64
+  - arm64

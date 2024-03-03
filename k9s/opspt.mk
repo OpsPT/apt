@@ -15,4 +15,7 @@ build_if_updated:
 
 build:
 	mkdir -p dist
-	wget https://github.com/derailed/k9s/releases/download/$(strip $(AVAILABLE_VERSION))/k9s_linux_amd64.deb  -O dist/k9s_$(strip $(AVAILABLE_VERSION))
+	wget https://github.com/derailed/k9s/releases/download/$(strip $(AVAILABLE_VERSION))/k9s_linux_amd64.deb  -O dist/k9s_buster_amd64_$(strip $(AVAILABLE_VERSION)).deb
+	wget https://github.com/derailed/k9s/releases/download/$(strip $(AVAILABLE_VERSION))/k9s_linux_arm64.deb  -O dist/k9s_buster_arm64_$(strip $(AVAILABLE_VERSION)).deb
+	cp dist/k9s_buster_amd64_$(strip $(AVAILABLE_VERSION)).deb dist/k9s_bullseye_amd64_$(strip $(AVAILABLE_VERSION)).deb
+	cp dist/k9s_buster_arm64_$(strip $(AVAILABLE_VERSION)).deb dist/k9s_bullseye_arm64_$(strip $(AVAILABLE_VERSION)).deb
