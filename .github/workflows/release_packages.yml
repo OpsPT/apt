@@ -6,14 +6,17 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Set up reprepro
+      env: 
+        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       run: |
         sudo apt-get update
-        sudo apt-get install reprepro yq
+        sudo apt-get install -y reprepro yq gnupg2
+        echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
         for dir in */
         do
           cd "${dir%/}/"
