@@ -1,0 +1,7 @@
+Origin: PACKAGE_NAME
+Label: opspt-PACKAGE_NAME
+Codename: %codename%
+Architectures: %arch%
+Components: main
+Description: DESCRIPTION
+SignWith: 6ACE5771E14C2E42B00C6FFAF84B0BE2594E4BF9

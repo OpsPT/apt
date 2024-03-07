@@ -1,0 +1,9 @@
+codenames:
+  - bookworm
+  - bullseye
+  - buster
+  # Add other versions here
+archs:
+  - amd64
+  - arm64
+  # Add other architectures here
