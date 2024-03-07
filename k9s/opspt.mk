@@ -10,6 +10,7 @@ check_version:
 
 build_if_updated:
 	@if [ "$(COMMIT)" = "$(shell git rev-parse HEAD)" ]; then \
+		echo "$(COMMIT) $(shell git rev-parse HEAD)"; \
 		make -f opspt.mk build; \
 	fi
 
