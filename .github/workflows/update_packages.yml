@@ -1,0 +1,26 @@
+name: Daily update check
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  commit:
+    runs-on: debian-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Commit and push changes
+        run: |
+          for dir in */
+          do
+            cd "${dir%/}/"
+            make -f opspt.mk check_version
+            cd ..
+          done
+          git add .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add opspt.version
+          git commit -m "Daily auto-update for $(date +%F)"
+          git push
