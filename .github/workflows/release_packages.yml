@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -15,7 +15,9 @@ jobs:
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       run: |
         sudo apt-get update
-        sudo apt-get install -y reprepro yq gnupg2
+        sudo apt-get install -y reprepro gnupg2 wget
+        sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        sudo chmod +x /usr/local/bin/yq
         echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
         for dir in */
         do
