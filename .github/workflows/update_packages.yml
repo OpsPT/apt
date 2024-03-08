@@ -1,4 +1,4 @@
-name: Daily update check
+name: Daily auto-update packages
 
 on:
   schedule:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Commit and push changes
         run: |
           for dir in */
