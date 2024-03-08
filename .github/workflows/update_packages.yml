@@ -21,6 +21,5 @@ jobs:
           git add .
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add opspt.version
           git commit -m "Daily auto-update for $(date +%F)"
           git push
