@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows:
+      - Daily auto-update packages
+    types:
+      - completed
 
 jobs:
   build:
