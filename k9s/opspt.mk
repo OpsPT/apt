@@ -9,6 +9,7 @@ check_version:
 	fi
 
 build_if_updated:
+	@echo "$(shell git show --oneline --name-only HEAD)"
 	@if git show --oneline --name-only HEAD | grep $(OPSPT_FOLDER)/opspt.version; then \
 		make -f opspt.mk build; \
 	fi
