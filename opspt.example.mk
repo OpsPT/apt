@@ -1,4 +1,5 @@
 # Example for a Github Repo, adapt as you need to. 
+OPSPT_FOLDER := "$(shell basename $(shell pwd))"
 LATEST_RELEASE := $(shell curl -s https://api.github.com/repos/USER/REPO/releases/latest | grep "tag_name" | cut -d '"' -f 4) 
 AVAILABLE_VERSION := $(shell tail -n 1 opspt.version) 
 
@@ -9,7 +10,7 @@ check_version:
 	fi
 
 build_if_updated:
-	@if ! git diff --name-only --exit-code opspt.version; then \
+	@if git diff --name-only HEAD~1 HEAD | grep $(OPSPT_FOLDER)/opspt.version; then \
 		make -f opspt.mk build; \
 	fi
 
