@@ -3,6 +3,7 @@ name: Daily auto-update packages
 on:
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   commit:
@@ -11,6 +12,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Commit and push changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           for dir in */
           do
@@ -18,6 +21,7 @@ jobs:
             make -f opspt.mk check_version
             cd ..
           done
+          git remote set-url origin "https://$GH_TOKEN@github.com/opsPT/apt.git"
           git add .
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
