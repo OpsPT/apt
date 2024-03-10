@@ -29,7 +29,7 @@ jobs:
           cd "${dir%/}/"
           archs=$(yq -r .archs[] opspt.vars.yml)
           codenames=$(yq -r .codenames[] opspt.vars.yml)
-          version=$(cat opspt.version)
+          version=$(tail -n 1 opspt.version)
           rm -rf dist
           make -f opspt.mk build_if_updated
           if [ -d "dist" ]; then
