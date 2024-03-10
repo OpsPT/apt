@@ -37,13 +37,13 @@ jobs:
             mkdir conf
             for arch in $archs; do
               for codename in $codenames; do
-                rm conf/distributions 
+                rm -f conf/distributions 
                 cp ../opspt.distributions conf/distributions
                 sed -i -e "s/%arch%/${arch}/g" -e "s/%codename%/${codename}/g" conf/distributions
                 cat conf/distributions
                 reprepro export
                 # Build debian packages
-                reprepro includedeb bullseye "./${dir%/}_${codename}_${arch}_${version}.deb"
+                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
             done
             cd ..
