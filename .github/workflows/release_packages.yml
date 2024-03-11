@@ -45,7 +45,7 @@ jobs:
                 reprepro export
                 # Build debian packages
                 reprepro --ignore=undefinedtarget includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
-                sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' opspt.version;
+                sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
               done
             done
             cd ..
