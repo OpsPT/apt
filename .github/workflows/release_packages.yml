@@ -44,7 +44,7 @@ jobs:
                 cat conf/distributions
                 reprepro export
                 # Build debian packages
-                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" --ignore=undefinedtarget
+                reprepro --ignore=undefinedtarget includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
                 sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' opspt.version;
               done
             done
