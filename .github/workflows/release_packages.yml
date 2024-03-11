@@ -18,6 +18,7 @@ jobs:
     - name: Set up reprepro
       env: 
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         sudo apt-get update
         sudo apt-get install -y reprepro gnupg2 wget
@@ -43,10 +44,19 @@ jobs:
                 cat conf/distributions
                 reprepro export
                 # Build debian packages
-                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb"
+                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" --ignore=undefinedtarget
+                sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' opspt.version;
               done
             done
             cd ..
           fi
           cd ..
         done
+        git remote set-url origin "https://$GH_TOKEN@github.com/opsPT/apt.git"
+        git add .
+        if [ -n "$(git status --porcelain)" ]; then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update build statuses"
+          git push
+        fi
