@@ -42,7 +42,7 @@ jobs:
                 cp ../opspt.distributions conf/opspt.distributions
                 sed -i -e "s/%arch%/${arch}/g" -e "s/%codename%/${codename}/g" conf/opspt.distributions
                 cat conf/opspt.distributions >> conf/distributions
-                cat "" >> conf/distributions
+                echo "" >> conf/distributions
               done
             done
             reprepro export
