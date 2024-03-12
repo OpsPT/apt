@@ -38,7 +38,6 @@ jobs:
             mkdir conf
             for arch in $archs; do
               for codename in $codenames; do
-                rm -f conf/distributions 
                 cp ../opspt.distributions conf/opspt.distributions
                 sed -i -e "s/%arch%/${arch}/g" -e "s/%codename%/${codename}/g" conf/opspt.distributions
                 cat conf/opspt.distributions >> conf/distributions
