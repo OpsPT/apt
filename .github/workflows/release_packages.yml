@@ -37,17 +37,17 @@ jobs:
             cd dist
             mkdir conf
             for arch in $archs; do
+              rm -f conf/distributions
               for codename in $codenames; do
                 cp ../opspt.distributions conf/opspt.distributions
                 sed -i -e "s/%arch%/${arch}/g" -e "s/%codename%/${codename}/g" conf/opspt.distributions
                 cat conf/opspt.distributions >> conf/distributions
                 echo "" >> conf/distributions
               done
-            done
-            reprepro export
-            # Build debian packages
-            for codename in $codenames; do
-              reprepro includedeb "${codename}" "./${dir%/}_${codename}_*_${version}.deb" 
+              reprepro export
+              for codename in $codenames; do
+                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
+              done
             done
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
             cd ..
