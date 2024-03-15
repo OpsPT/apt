@@ -46,7 +46,9 @@ jobs:
             done
             reprepro export
             for codename in $codenames; do
-              reprepro includedeb "${codename}" "./${dir%/}_${codename}_*_${version}.deb" 
+              for arch in $archs; do
+                reprepro includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
+              done
             done
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
             cd ..
