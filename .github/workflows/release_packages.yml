@@ -55,7 +55,7 @@ jobs:
             reprepro export
             for codename in $codenames; do
               for arch in $archs; do
-                reprepro --outdir s3mount includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
+                reprepro --outdir ./s3mount includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
               done
             done
             umount s3mount
