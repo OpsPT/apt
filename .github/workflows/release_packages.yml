@@ -31,7 +31,6 @@ jobs:
         git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
         cd /tmp/deb-s3
         sudo bundle install
-        export PATH="$(sudo ruby -e 'print Gem.user_dir')/bin:$PATH"
         cd -
         sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         sudo chmod +x /usr/local/bin/yq
@@ -48,7 +47,7 @@ jobs:
             cd dist
             for codename in $codenames; do
               for arch in $archs; do
-                deb-s3 upload --bucket $R2_BUCKET --access-key $R2_ACCESS_KEY --secret-key $R2_SECRET_KEY --url $R2_URL --codename $codename --arch $arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
+                sudo bundle exec deb-s3 upload --bucket $R2_BUCKET --access-key $R2_ACCESS_KEY --secret-key $R2_SECRET_KEY --url $R2_URL --codename $codename --arch $arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
             done
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
