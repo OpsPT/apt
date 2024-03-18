@@ -26,11 +26,11 @@ jobs:
         R2_BUCKET: ${{ secrets.R2_BUCKET }}
       run: |
         sudo apt-get update
-        sudo apt-get install -y gnupg2 wget s3fs rubygems
-        gem install bundler
+        sudo apt-get install -y gnupg2 wget rubygems
+        sudo gem install bundler
         git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
         cd /tmp/deb-s3
-        bundle install
+        sudo bundle install
         cd -
         sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         sudo chmod +x /usr/local/bin/yq
