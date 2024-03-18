@@ -31,6 +31,7 @@ jobs:
         git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
         cd /tmp/deb-s3
         sudo bundle install
+        sudo bundle config set --local path /usr/local/bin
         cd -
         sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         sudo chmod +x /usr/local/bin/yq
