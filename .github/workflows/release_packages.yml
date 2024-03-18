@@ -26,7 +26,8 @@ jobs:
         R2_BUCKET: ${{ secrets.R2_BUCKET }}
       run: |
         sudo apt-get update
-        sudo apt-get install -y gnupg2 wget s3fs ruby
+        sudo apt-get install -y gnupg2 wget s3fs rubygems
+        gem install bundler
         git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
         cd /tmp/deb-s3
         bundle install
