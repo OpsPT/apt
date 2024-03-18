@@ -18,6 +18,7 @@ jobs:
     - name: Set up reprepro
       env: 
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         R2_URL: ${{ secrets.R2_URL }}
         R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
@@ -25,12 +26,14 @@ jobs:
         R2_BUCKET: ${{ secrets.R2_BUCKET }}
       run: |
         sudo apt-get update
-        sudo apt-get install -y reprepro gnupg2 wget s3fs
+        sudo apt-get install -y gnupg2 wget s3fs ruby
+        git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
+        cd /tmp/deb-s3
+        bundle install
+        cd -
         sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         sudo chmod +x /usr/local/bin/yq
         echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
-        echo -n "$R2_ACCESS_KEY:$R2_SECRET_KEY" > /tmp/r2_key
-        chmod 600 /tmp/r2_key
         for dir in */
         do
           cd "${dir%/}/"
@@ -41,24 +44,12 @@ jobs:
           make -f opspt.mk build_if_updated
           if [ -d "dist" ]; then
             cd dist
-            mkdir conf
-            mkdir s3mount
-            s3fs -o passwd_file=/tmp/r2_key -o url=$R2_URL -o use_path_request_style -o endpoint=auto $R2_BUCKET s3mount/
-            archs=$(tr "\n" " " <<< $archs) 
-            rm -f conf/distributions
-            for codename in $codenames; do
-              cp ../opspt.distributions conf/opspt.distributions
-              sed -i -e "s|%arch%|${archs}|g" -e "s/%codename%/${codename}/g" conf/opspt.distributions
-              cat conf/opspt.distributions >> conf/distributions
-              echo "" >> conf/distributions
-            done
-            reprepro export
             for codename in $codenames; do
               for arch in $archs; do
                 reprepro --outdir ./s3mount includedeb "${codename}" "./${dir%/}_${codename}_${arch}_${version}.deb" 
+                deb-s3 upload --bucket $R2_BUCKET --access-key $R2_ACCESS_KEY --secret-key $R2_SECRET_KEY --url $R2_URL --codename $codename --arch $arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
             done
-            umount s3mount
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
             cd ..
           fi
