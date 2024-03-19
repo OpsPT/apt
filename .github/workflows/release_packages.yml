@@ -27,11 +27,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y gnupg2 wget rubygems
-        sudo gem install bundler
-        git clone https://github.com/OpsPT/deb-s3.git /tmp/deb-s3
-        cd /tmp/deb-s3
-        sudo bundle install
-        cd -
+        gem install deb-s3
         sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         sudo chmod +x /usr/local/bin/yq
         echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
@@ -47,7 +43,7 @@ jobs:
             cd dist
             for codename in $codenames; do
               for arch in $archs; do
-                sudo bundle exec -g /tmp/deb-s3/Gemfile deb-s3 upload --bucket $R2_BUCKET --access-key $R2_ACCESS_KEY --secret-key $R2_SECRET_KEY --url $R2_URL --codename $codename --arch $arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
+                deb-s3 upload --bucket $R2_BUCKET --access-key $R2_ACCESS_KEY --secret-key $R2_SECRET_KEY --url $R2_URL --codename $codename --arch $arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
             done
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
