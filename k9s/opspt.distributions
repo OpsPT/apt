@@ -1,7 +1,0 @@
-Origin: k9s
-Label: opspt-k9s
-Codename: %codename%
-Architectures: %arch%
-Components: main
-Description: Kubernetes CLI To Manage Your Clusters In Style!  
-SignWith: 6ACE5771E14C2E42B00C6FFAF84B0BE2594E4BF9
