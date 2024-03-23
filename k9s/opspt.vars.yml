@@ -2,6 +2,9 @@ codenames:
   - bookworm
   - bullseye
   - buster
+  - jammy
+  - lunar
+  - mantic 
 archs:
   - amd64
   - arm64
