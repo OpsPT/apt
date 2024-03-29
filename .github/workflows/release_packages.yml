@@ -51,6 +51,7 @@ jobs:
           fi
           cd ..
         done
+        deb-s3 clean --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL 
         git remote set-url origin "https://$GH_TOKEN@github.com/opsPT/apt.git"
         git add .
         if [ -n "$(git status --porcelain)" ]; then
