@@ -43,6 +43,7 @@ jobs:
             cd dist
             for codename in $codenames; do
               for arch in $archs; do
+                deb-s3 delete --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL --codename=$codename --arch=$arch ${dir%/}
                 deb-s3 upload --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL --codename=$codename --arch=$arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
             done
