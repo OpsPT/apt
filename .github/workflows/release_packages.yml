@@ -46,13 +46,13 @@ jobs:
                 deb-s3 delete --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL --codename=$codename --arch=$arch ${dir%/} || true
                 deb-s3 upload --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL --codename=$codename --arch=$arch --sign=$GPG_KEY_ID "./${dir%/}_${codename}_${arch}_${version}.deb"
               done
+              deb-s3 clean --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL --codename=$codename
             done
             sed -i 's/BUILDED=FALSE/BUILDED=TRUE/g' ../opspt.version;
             cd ..
           fi
           cd ..
         done
-        deb-s3 clean --bucket=$R2_BUCKET --access-key-id=$R2_ACCESS_KEY --secret-access-key=$R2_SECRET_KEY --endpoint=$R2_URL 
         git remote set-url origin "https://$GH_TOKEN@github.com/opsPT/apt.git"
         git add .
         if [ -n "$(git status --porcelain)" ]; then
