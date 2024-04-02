@@ -13,7 +13,7 @@ ARCHITECTURE=$3
 REPOSITORY_URL=$4
 CODENAME=$5
 
-curl -H 'User-Agent: Debian APT-HTTP/1.3' $REPOSITORY_URL/dists/$CODENAME/binary-$ARCHITECTURE/Packages > Packages
-cat Packages
-
+PACKAGE=$(curl -H 'User-Agent: Debian APT-HTTP/1.3' $REPOSITORY_URL/dists/$CODENAME/binary-$ARCHITECTURE/Packages)
+PATH_URL=$(echo -e "$PACKAGE"|grep -A 100 "Package: $PACKAGE_NAME"|grep Filename|head -n 1|cut -d ':' -f 2|sed 's/ //g')
+echo $PATH_URL
 
